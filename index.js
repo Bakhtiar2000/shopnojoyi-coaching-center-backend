@@ -36,9 +36,14 @@ async function run() {
 
     app.delete('/lectures/:id', async (req, res) => {
         const id = req.params.id;
-        // console.log(id)
         const query = { _id: new ObjectId(id) }
         const result = await lecturesCollection.deleteOne(query)
+        res.send(result)
+    })
+
+    app.post('/lectures', async (req, res) => {
+        const item = req.body
+        const result = await lecturesCollection.insertOne(item)
         res.send(result)
     })
 
@@ -51,9 +56,14 @@ async function run() {
 
     app.delete('/teachers/:id', async (req, res) => {
         const id = req.params.id;
-        // console.log(id)
         const query = { _id: new ObjectId(id) }
         const result = await teachersCollection.deleteOne(query)
+        res.send(result)
+    })
+
+    app.post('/teachers', async (req, res) => {
+        const item = req.body
+        const result = await teachersCollection.insertOne(item)
         res.send(result)
     })
 
@@ -66,9 +76,14 @@ async function run() {
 
     app.delete('/gallery/:id', async (req, res) => {
         const id = req.params.id;
-        // console.log(id)
         const query = { _id: new ObjectId(id) }
         const result = await galleryCollection.deleteOne(query)
+        res.send(result)
+    })
+
+    app.post('/gallery', async (req, res) => {
+        const item = req.body
+        const result = await galleryCollection.insertOne(item)
         res.send(result)
     })
 
@@ -81,9 +96,14 @@ async function run() {
 
     app.delete('/programs/:id', async (req, res) => {
         const id = req.params.id;
-        // console.log(id)
         const query = { _id: new ObjectId(id) }
         const result = await programsCollection.deleteOne(query)
+        res.send(result)
+    })
+
+    app.post('/programs', async (req, res) => {
+        const item = req.body
+        const result = await programsCollection.insertOne(item)
         res.send(result)
     })
 
