@@ -10,7 +10,6 @@ app.use(cors())
 app.use(express.json())
 
 //Mongodb
-// const uri = "mongodb+srv://shopnojoyi:<password>@cluster0.pyuhwjw.mongodb.net/?retryWrites=true&w=majority";
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.pyuhwjw.mongodb.net/?retryWrites=true&w=majority`
 
 const client = new MongoClient(uri, {
@@ -35,10 +34,26 @@ async function run() {
         res.send(result)
     })
 
+    app.delete('/lectures/:id', async (req, res) => {
+        const id = req.params.id;
+        // console.log(id)
+        const query = { _id: new ObjectId(id) }
+        const result = await lecturesCollection.deleteOne(query)
+        res.send(result)
+    })
+
 
     // teachers
     app.get('/teachers', async (req, res) => {
         const result = await teachersCollection.find().toArray()
+        res.send(result)
+    })
+
+    app.delete('/teachers/:id', async (req, res) => {
+        const id = req.params.id;
+        // console.log(id)
+        const query = { _id: new ObjectId(id) }
+        const result = await teachersCollection.deleteOne(query)
         res.send(result)
     })
 
@@ -49,10 +64,26 @@ async function run() {
         res.send(result)
     })
 
+    app.delete('/gallery/:id', async (req, res) => {
+        const id = req.params.id;
+        // console.log(id)
+        const query = { _id: new ObjectId(id) }
+        const result = await galleryCollection.deleteOne(query)
+        res.send(result)
+    })
+
 
     // programs
     app.get('/programs', async (req, res) => {
         const result = await programsCollection.find().toArray()
+        res.send(result)
+    })
+
+    app.delete('/programs/:id', async (req, res) => {
+        const id = req.params.id;
+        // console.log(id)
+        const query = { _id: new ObjectId(id) }
+        const result = await programsCollection.deleteOne(query)
         res.send(result)
     })
 
