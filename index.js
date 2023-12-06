@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');;
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');;
 require('dotenv').config()
-const app=express();
-const port= process.env.PORT || 5000;
+const app = express();
+const port = process.env.PORT || 5000;
 
 //middleware
 app.use(cors())
@@ -13,120 +13,141 @@ app.use(express.json())
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.pyuhwjw.mongodb.net/?retryWrites=true&w=majority`
 
 const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+    }
 });
 
 async function run() {
-  try {
-    const lecturesCollection = client.db('shopnojoyiDb').collection('lectures')
-    const teachersCollection = client.db('shopnojoyiDb').collection('teachers')
-    const programsCollection = client.db('shopnojoyiDb').collection('programs')
-    const galleryCollection = client.db('shopnojoyiDb').collection('gallery')
-    const reviewsCollection = client.db('shopnojoyiDb').collection('reviews')
+    try {
+        const lecturesCollection = client.db('shopnojoyiDb').collection('lectures')
+        const teachersCollection = client.db('shopnojoyiDb').collection('teachers')
+        const programsCollection = client.db('shopnojoyiDb').collection('programs')
+        const galleryCollection = client.db('shopnojoyiDb').collection('gallery')
+        const reviewsCollection = client.db('shopnojoyiDb').collection('reviews')
+        const passwordCollection = client.db('shopnojoyiDb').collection('password')
 
-    // lectures
-    app.get('/lectures', async (req, res) => {
-        const result = await lecturesCollection.find().toArray()
-        res.send(result)
-    })
+        // lectures
+        app.get('/lectures', async (req, res) => {
+            const result = await lecturesCollection.find().toArray()
+            res.send(result)
+        })
 
-    app.delete('/lectures/:id', async (req, res) => {
-        const id = req.params.id;
-        const query = { _id: new ObjectId(id) }
-        const result = await lecturesCollection.deleteOne(query)
-        res.send(result)
-    })
+        app.delete('/lectures/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await lecturesCollection.deleteOne(query)
+            res.send(result)
+        })
 
-    app.post('/lectures', async (req, res) => {
-        const item = req.body
-        const result = await lecturesCollection.insertOne(item)
-        res.send(result)
-    })
-
-
-    // teachers
-    app.get('/teachers', async (req, res) => {
-        const result = await teachersCollection.find().toArray()
-        res.send(result)
-    })
-
-    app.delete('/teachers/:id', async (req, res) => {
-        const id = req.params.id;
-        const query = { _id: new ObjectId(id) }
-        const result = await teachersCollection.deleteOne(query)
-        res.send(result)
-    })
-
-    app.post('/teachers', async (req, res) => {
-        const item = req.body
-        const result = await teachersCollection.insertOne(item)
-        res.send(result)
-    })
+        app.post('/lectures', async (req, res) => {
+            const item = req.body
+            const result = await lecturesCollection.insertOne(item)
+            res.send(result)
+        })
 
 
-    // gallery
-    app.get('/gallery', async (req, res) => {
-        const result = await galleryCollection.find().toArray()
-        res.send(result)
-    })
+        // teachers
+        app.get('/teachers', async (req, res) => {
+            const result = await teachersCollection.find().toArray()
+            res.send(result)
+        })
 
-    app.delete('/gallery/:id', async (req, res) => {
-        const id = req.params.id;
-        const query = { _id: new ObjectId(id) }
-        const result = await galleryCollection.deleteOne(query)
-        res.send(result)
-    })
+        app.delete('/teachers/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await teachersCollection.deleteOne(query)
+            res.send(result)
+        })
 
-    app.post('/gallery', async (req, res) => {
-        const item = req.body
-        const result = await galleryCollection.insertOne(item)
-        res.send(result)
-    })
-
-
-    // programs
-    app.get('/programs', async (req, res) => {
-        const result = await programsCollection.find().toArray()
-        res.send(result)
-    })
-
-    app.delete('/programs/:id', async (req, res) => {
-        const id = req.params.id;
-        const query = { _id: new ObjectId(id) }
-        const result = await programsCollection.deleteOne(query)
-        res.send(result)
-    })
-
-    app.post('/programs', async (req, res) => {
-        const item = req.body
-        const result = await programsCollection.insertOne(item)
-        res.send(result)
-    })
+        app.post('/teachers', async (req, res) => {
+            const item = req.body
+            const result = await teachersCollection.insertOne(item)
+            res.send(result)
+        })
 
 
-    // reviews
-    app.get('/reviews', async (req, res) => {
-        const result = await reviewsCollection.find().toArray()
-        res.send(result)
-    })
+        // gallery
+        app.get('/gallery', async (req, res) => {
+            const result = await galleryCollection.find().toArray()
+            res.send(result)
+        })
+
+        app.delete('/gallery/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await galleryCollection.deleteOne(query)
+            res.send(result)
+        })
+
+        app.post('/gallery', async (req, res) => {
+            const item = req.body
+            const result = await galleryCollection.insertOne(item)
+            res.send(result)
+        })
 
 
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } 
-  finally {}
+        // programs
+        app.get('/programs', async (req, res) => {
+            const result = await programsCollection.find().toArray()
+            res.send(result)
+        })
+
+        app.delete('/programs/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await programsCollection.deleteOne(query)
+            res.send(result)
+        })
+
+        app.post('/programs', async (req, res) => {
+            const item = req.body
+            const result = await programsCollection.insertOne(item)
+            res.send(result)
+        })
+
+
+        // reviews
+        app.get('/reviews', async (req, res) => {
+            const result = await reviewsCollection.find().toArray()
+            res.send(result)
+        })
+
+        // password
+        app.get('/password', async (req, res) => {
+            const result = await passwordCollection.find().toArray()
+            res.send(result)
+        })
+
+        app.patch('/password', async (req, res) => {
+            const userEmail = `${process.env.user_mail}`;
+            const filter = { mail: userEmail };
+            const { pass } = req.body
+            console.log(userEmail, pass)
+            const updateDoc = {
+                $set: {
+                    pass: pass
+                }
+            };
+            const result = await passwordCollection.updateOne(filter, updateDoc)
+            res.send(result)
+        });
+
+
+        await client.db("admin").command({ ping: 1 });
+        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    }
+    finally { }
 }
 run().catch(console.dir);
 
 
-app.get('/', (req, res)=> {
+app.get('/', (req, res) => {
     res.send('Shopnojoyi is teaching')
 })
 
-app.listen(port, ()=> {
+app.listen(port, () => {
     console.log(`Shopnojoyi server is running on port: ${port}`)
 })
