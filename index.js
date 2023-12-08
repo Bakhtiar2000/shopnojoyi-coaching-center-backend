@@ -117,15 +117,23 @@ async function run() {
 
         // password
         app.get('/password', async (req, res) => {
+            if (`${process.env.TOKEN}` !== req.query.token) {
+                return res.status(403).send({ error: 1, message: "Forbidden access" })
+
+            }
             const result = await passwordCollection.find().toArray()
             res.send(result)
         })
 
         app.patch('/password', async (req, res) => {
-            const userEmail = `${process.env.user_mail}`;
+
+            if (`${process.env.TOKEN}` !== req.query.token) {
+                return res.status(403).send({ error: 1, message: "Forbidden access" })
+
+            }
+            const userEmail = `${process.env.USER_MAIL}`;
             const filter = { mail: userEmail };
             const { pass } = req.body
-            console.log(userEmail, pass)
             const updateDoc = {
                 $set: {
                     pass: pass
