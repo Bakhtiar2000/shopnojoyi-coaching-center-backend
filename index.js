@@ -28,6 +28,7 @@ async function run() {
         const galleryCollection = client.db('shopnojoyiDb').collection('gallery')
         const reviewsCollection = client.db('shopnojoyiDb').collection('reviews')
         const passwordCollection = client.db('shopnojoyiDb').collection('password')
+        const paymentsCollection = client.db('shopnojoyiDb').collection('payments')
 
         // lectures
         app.get('/lectures', async (req, res) => {
@@ -112,6 +113,25 @@ async function run() {
         // reviews
         app.get('/reviews', async (req, res) => {
             const result = await reviewsCollection.find().toArray()
+            res.send(result)
+        })
+
+        // payments
+        app.get('/payments', async (req, res) => {
+            const result = await paymentsCollection.find().toArray()
+            res.send(result)
+        })
+
+        app.delete('/payments/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await paymentsCollection.deleteOne(query)
+            res.send(result)
+        })
+
+        app.post('/payments', async (req, res) => {
+            const item = req.body
+            const result = await paymentsCollection.insertOne(item)
             res.send(result)
         })
 
