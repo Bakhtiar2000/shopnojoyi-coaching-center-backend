@@ -63,6 +63,31 @@ async function run() {
             res.send(result)
         })
 
+        app.patch('/teachers/:id/:singleClass', async (req, res) => {
+            const id = req.params.id;
+            const singleClass = req.params.singleClass;
+            const query = { _id: new ObjectId(id) }
+            const update =  { $pull: { classes: singleClass } };
+            const result = await teachersCollection.updateOne(query, update);
+            res.send(result)
+        })
+
+        app.patch('/teachers/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+            const updateData = req.body
+            const updateDoc = {
+                $set: {
+                    name: updateData?.name,
+                    position: updateData?.position,
+                    education: updateData?.education,
+                    classes: updateData?.classes
+                }
+            };
+            const result = await teachersCollection.updateOne(filter, updateDoc)
+            res.send(result)
+        });
+
         app.post('/teachers', async (req, res) => {
             const item = req.body
             const result = await teachersCollection.insertOne(item)
@@ -129,11 +154,35 @@ async function run() {
             res.send(result)
         })
 
+        app.patch('/payments/:id/:sub', async (req, res) => {
+            const id = req.params.id;
+            const sub = req.params.sub;
+            const query = { _id: new ObjectId(id) }
+            const update =  { $pull: { subjects: sub } };
+            const result = await paymentsCollection.updateOne(query, update);
+            res.send(result)
+        })
+
         app.post('/payments', async (req, res) => {
             const item = req.body
             const result = await paymentsCollection.insertOne(item)
             res.send(result)
         })
+
+        app.patch('/payments/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+            const updateData = req.body
+            const updateDoc = {
+                $set: {
+                    division: updateData?.division,
+                    subjects: updateData?.subjects,
+                    payment: updateData?.payment
+                }
+            };
+            const result = await paymentsCollection.updateOne(filter, updateDoc)
+            res.send(result)
+        });
 
         // password
         app.get('/password', async (req, res) => {
